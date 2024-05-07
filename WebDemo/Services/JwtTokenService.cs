@@ -14,7 +14,7 @@ namespace WebDemo.Services
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public const string Key = "1A8655BDB34EB679A4FE1ABFA14EB";
+        public const string Key = "d62bc30f96622ecfae1f1e954a5348fe96b3a283ace82b933bbc04c2b1a64717";
             
         public string GenarateKey(User user)
         {

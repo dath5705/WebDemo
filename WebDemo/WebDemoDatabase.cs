@@ -12,12 +12,19 @@ namespace WebDemo
         {
         }
         public DbSet<User> Users => Set<User>();
+        public DbSet<Role> Roles => Set<Role>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasKey(x => x.Id);
             //    modelBuilder.Entity<Customer>().HasKey(x => x.Id);
             //    modelBuilder.Entity<Bill>().HasKey(x => x.Id);
-            //    modelBuilder.Entity<Warehouse>().HasKey(x => x.Id);
+            modelBuilder.Entity<Warehouse>().HasKey(x => x.Id);
+            modelBuilder.Entity<Role>().HasKey(x=> x.Id);
+            modelBuilder.Entity<Role>()
+                .HasMany(e => e.Users)
+                .WithOne(e => e.Roll)
+                .HasForeignKey(e => e.RoleId);
+
             //    modelBuilder.Entity<BillDetail>().HasKey(x => new { x.ProductId, x.BillId });
 
             //    modelBuilder.Entity<Staff>()

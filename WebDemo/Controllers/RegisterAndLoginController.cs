@@ -30,6 +30,7 @@ namespace WebDemo.Controllers
             {
                 UserName = command.UserName,
                 Password = command.Password,
+                RoleId = command.RoleId, 
             };
             database.Users.Add(user);
             database.SaveChanges();
