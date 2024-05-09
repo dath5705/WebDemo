@@ -18,6 +18,7 @@ builder.Services.AddDbContext<WebDemoDatabase>(optionsAction =>
     });
 });
 
+builder.Services.AddScoped<ChangeNameService, ChangeNameService>();
 builder.Services.AddScoped<JwtTokenService, JwtTokenService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

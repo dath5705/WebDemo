@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebDemo.Commands;
 using WebDemo.Models;
 using WebDemo.Services;
@@ -30,16 +31,21 @@ namespace WebDemo.Controllers
             {
                 UserName = command.UserName,
                 Password = command.Password,
-                RoleId = command.RoleId, 
+                RoleId = command.RoleId,
             };
             database.Users.Add(user);
+            database.SaveChanges();
+            var names = database.Users.OrderByDescending(x => x.Id);
+            var name = names.First();
+            name.Name = "User" + name.Id;
+            database.Users.Update(name);
             database.SaveChanges();
             return Ok("Register Successed");
         }
         [HttpGet("Login")]
         public IActionResult Login([FromQuery] Register command)
         {
-            var user = database.Users.FirstOrDefault(s => s.UserName == command.UserName);
+            var user = database.Users.Include(e=> e.Informations).FirstOrDefault(s => s.UserName == command.UserName);
             if (user == null)
             {
                 return BadRequest(" No have this user.");

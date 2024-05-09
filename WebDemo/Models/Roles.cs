@@ -2,11 +2,11 @@
 
 namespace WebDemo.Models
 {
-    public class Role
+    public class Roles
     {
         private readonly ILazyLoader? lazyLoader;
-        public Role() { }
-        public Role(ILazyLoader loader)
+        public Roles() { }
+        public Roles(ILazyLoader loader)
         {
             lazyLoader = loader;
         }

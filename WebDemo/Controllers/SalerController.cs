@@ -13,12 +13,15 @@ namespace WebDemo.Controllers
     {
         private readonly WebDemoDatabase database;
         private readonly JwtTokenService jwtService;
+        private readonly ChangeNameService changeNameService;
         public SalerController(
             WebDemoDatabase database,
-            JwtTokenService jwtService)
+            JwtTokenService jwtService,
+            ChangeNameService changeNameService)
         {
             this.database = database;
             this.jwtService = jwtService;
+            this.changeNameService = changeNameService;
         }
         [Authorize]
         [HttpPost("CreateProduct")]
