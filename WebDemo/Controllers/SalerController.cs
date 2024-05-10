@@ -13,11 +13,11 @@ namespace WebDemo.Controllers
     {
         private readonly WebDemoDatabase database;
         private readonly JwtTokenService jwtService;
-        private readonly ChangeNameService changeNameService;
+        private readonly ChangeInformationService changeNameService;
         public SalerController(
             WebDemoDatabase database,
             JwtTokenService jwtService,
-            ChangeNameService changeNameService)
+            ChangeInformationService changeNameService)
         {
             this.database = database;
             this.jwtService = jwtService;

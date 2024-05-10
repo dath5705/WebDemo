@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using WebDemo.Commands;
 using WebDemo.Models;
 using WebDemo.Services;
@@ -12,23 +13,26 @@ namespace WebDemo.Controllers
     {
         private readonly WebDemoDatabase database;
         private readonly JwtTokenService jwtService;
-        private readonly ChangeNameService changeNameService;
+        private readonly ChangeInformationService changeNameService;
+        private readonly CartService cartService;
 
         public UserController(
             WebDemoDatabase database,
             JwtTokenService jwtService,
-            ChangeNameService changeNameService)
+            ChangeInformationService changeNameService,
+            CartService cartService)
         {
             this.database = database;
             this.jwtService = jwtService;
             this.changeNameService = changeNameService;
+            this.cartService = cartService;
         }
         [Authorize]
         [HttpPost("AddInformation")]
         public IActionResult AddInformation([FromForm] AddInformation command)
         {
             var userId = jwtService.GetId();
-            var information = new Informations()
+            var information = new Information()
             {
                 Name = command.Name,
                 Number = command.Number,
@@ -44,45 +48,44 @@ namespace WebDemo.Controllers
         [HttpPost("ChangeName")]
         public IActionResult ChangeName([FromForm] AddInformation command)
         {
-            changeNameService.ChangeName(command.Name);
-            return Ok();
+            string result = changeNameService.ChangeName(command.Name);
+            return Ok(result);
         }
-        //[Authorize]
-        //[HttpPost("ChangeAddress")]
-        //public IActionResult ChangeAddress([FromForm] AddInformation command)
-        //{
-        //    changeNameService.ChangeAddress(command.Address);
-        //    return Ok();
-        //}
-        //[HttpPost("CreateBill")]
-        //public IActionResult CreateBill([FromForm] CreateBill command)
-        //{
-        //    var position = jwtService.GetPosition();
-        //    if (position == "Sales Staff")
-        //    {
-        //        createBills.CreateBill(command.Customer, command.Address);
-        //        return Ok();
-        //    }
-        //    else
-        //    {
-        //        return BadRequest("Cannot access this section");
-        //    }
-        //}
+        [Authorize]
+        [HttpPost("ChangeAddress")]
+        public IActionResult ChangeAddress([FromForm] ChangeInformation command)
+        {
+            var userId =jwtService.GetId();
+            var inforList = database.Informations.Where(x => x.UserId == userId).ToList();
+            if (inforList == null)
+            {
+                return BadRequest("You dont have address. please add your address");
+            }
+            var infor = inforList.FirstOrDefault(e=> e.Id == command.Id);
+            if (infor == null)
+            {
+                return Ok("No have this user");
+            }
+            infor.Address = command.Address;
+            database.Informations.Update(infor);
+            database.SaveChanges();
+            return Ok("Change Complete");
+        }
 
-        //[HttpPost("AddProducts")]
-        //public IActionResult AddProduct([FromQuery] AddProduct command)
-        //{
-        //    var position = jwtService.GetPosition();
-        //    if (position == "Sales Staff")
-        //    {
-        //        createBills.AddProduct(command.Product, command.Quantity);
-        //        return Ok();
-        //    }
-        //    else
-        //    {
-        //        return BadRequest("Cannot access this section");
+        [HttpPost("AddProductsToCart")]
+        public IActionResult AddProduct([FromForm] AddProductsToCart command)
+        {
+            var position = jwtService.GetPosition();
+            if (position == 2)
+            {
+                 var a =cartService.AddProducts(command.ProductName, command.Quantity);
+                return Ok(a);
+            }
+            else
+            {
+                return BadRequest("Cannot access this section");
 
-        //    }
-        //}
+            }
+        }
     }
 }

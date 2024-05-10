@@ -2,11 +2,11 @@
 
 namespace WebDemo.Models
 {
-    public class Informations
+    public class Information
     {
         private readonly ILazyLoader? lazyLoader;
-        public Informations() { }
-        public Informations(ILazyLoader loader)
+        public Information() { }
+        public Information(ILazyLoader loader)
         {
             lazyLoader = loader;
         }

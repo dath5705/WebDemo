@@ -19,7 +19,7 @@ namespace WebDemo.Models
         private User? user;
         public User? User { get => lazyLoader?.Load(this, ref user); set => user = value; }
 
-        //private ICollection<BillDetail>? billsDetail;
-        //public ICollection<BillDetail>? BillsDetail { get => lazyLoader?.Load(this, ref billsDetail); set => billsDetail = value; }
+        private ICollection<ProductInCart>? productsInCart;
+        public ICollection<ProductInCart>? ProductsInCart { get => lazyLoader?.Load(this, ref productsInCart); set => productsInCart = value; }
     }
 }
