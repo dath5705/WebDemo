@@ -10,7 +10,6 @@ namespace WebDemo.Models
         {
             lazyLoader = loader;
         }
-        public int Id { get; set; } = 0;
         public int UserId { get; set; } = 0;
         public int ProductId { get; set; } = 0;
         public int Quantity { get; set; } = 0;

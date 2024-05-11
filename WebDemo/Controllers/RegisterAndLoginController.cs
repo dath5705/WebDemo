@@ -32,7 +32,7 @@ namespace WebDemo.Controllers
                 UserName = command.UserName,
                 Password = command.Password,
                 RoleId = command.RoleId,
-                Name=command.Name
+                Name = command.Name
             };
             database.Users.Add(user);
             database.SaveChanges();
@@ -43,15 +43,15 @@ namespace WebDemo.Controllers
             database.SaveChanges();
             return Ok("Register Successed");
         }
-        [HttpGet("Login")]
-        public IActionResult Login([FromQuery] Register command)
+        [HttpPost("Login")]
+        public IActionResult Login([FromForm] Register command)
         {
-            var user = database.Users.Include(e=> e.Informations).FirstOrDefault(s => s.UserName == command.UserName);
+            var user = database.Users.Include(e => e.Informations).FirstOrDefault(s => s.UserName == command.UserName);
             if (user == null)
             {
                 return BadRequest(" No have this user.");
             }
-            if (user.Password != command.Password || user.Password == null)   
+            if (user.Password != command.Password || user.Password == null)
             {
                 return BadRequest("Wrong password.");
             }

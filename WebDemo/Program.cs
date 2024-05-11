@@ -21,6 +21,7 @@ builder.Services.AddDbContext<WebDemoDatabase>(optionsAction =>
 builder.Services.AddScoped<ChangeInformationService, ChangeInformationService>();
 builder.Services.AddScoped<JwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<CartService, CartService>();
+builder.Services.AddScoped<ConvertService, ConvertService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

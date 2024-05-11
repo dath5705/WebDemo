@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using WebDemo.Models;
@@ -16,6 +17,7 @@ namespace WebDemo
         public DbSet<Information> Informations => Set<Information>();
         public DbSet<Warehouse> Warehouse => Set<Warehouse>();
         public DbSet<ProductInCart> ProductsInCart => Set<ProductInCart>();
+        public DbSet<Sex> Sexs => Set<Sex>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +31,10 @@ namespace WebDemo
                 .HasMany(e => e.Users)
                 .WithOne(e => e.Roll)
                 .HasForeignKey(e => e.RoleId);
+            modelBuilder.Entity<Sex>()
+                .HasMany(e => e.Users)
+                .WithOne(e => e.Sex)
+                .HasForeignKey(e => e.SexId);
             modelBuilder.Entity<User>()
                 .HasMany(e => e.Products)
                 .WithOne(e => e.User)
@@ -42,7 +48,6 @@ namespace WebDemo
                 .WithOne(e => e.User)
                 .HasForeignKey(e => e.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-            
             modelBuilder.Entity<Warehouse>()
                 .HasMany(e => e.ProductsInCart)
                 .WithOne(e => e.Product)

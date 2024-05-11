@@ -14,10 +14,15 @@ namespace WebDemo.Models
         public string UserName { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public int RoleId { get; set; } = 0;
-        public string? Name { get; set; } = string.Empty ;
+        public string? Name { get; set; }
+        public int? SexId { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         private Role? roll;
         public Role? Roll { get => lazyLoader?.Load(this, ref roll); set => roll = value;}
+
+        private Sex? sex;
+        public Sex? Sex { get => lazyLoader?.Load(this, ref sex); set => sex = value; }
 
         private ICollection<Warehouse>? products;
         public ICollection<Warehouse>? Products { get => lazyLoader?.Load(this, ref products); set => products = value; }

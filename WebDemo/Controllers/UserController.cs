@@ -4,6 +4,7 @@ using System.Net;
 using WebDemo.Commands;
 using WebDemo.Models;
 using WebDemo.Services;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace WebDemo.Controllers
 {
@@ -13,18 +14,18 @@ namespace WebDemo.Controllers
     {
         private readonly WebDemoDatabase database;
         private readonly JwtTokenService jwtService;
-        private readonly ChangeInformationService changeNameService;
+        private readonly ChangeInformationService changeInformationService;
         private readonly CartService cartService;
 
         public UserController(
             WebDemoDatabase database,
             JwtTokenService jwtService,
-            ChangeInformationService changeNameService,
+            ChangeInformationService changeInformationService,
             CartService cartService)
         {
             this.database = database;
             this.jwtService = jwtService;
-            this.changeNameService = changeNameService;
+            this.changeInformationService = changeInformationService;
             this.cartService = cartService;
         }
         [Authorize]
@@ -45,33 +46,50 @@ namespace WebDemo.Controllers
         }
 
         [Authorize]
-        [HttpPost("ChangeName")]
-        public IActionResult ChangeName([FromForm] AddInformation command)
+        [HttpPost("ChangeNameUser")]
+        public IActionResult ChangeName([FromForm] ChangeInformation command)
         {
-            string result = changeNameService.ChangeName(command.Name);
+            string result = changeInformationService.ChangeName(command.Name);
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPost("ChangeSexUser")]
+        public IActionResult ChangeSex([FromForm] ChangeInformation command)
+        {
+            string result = changeInformationService.ChangeSex(command.SexId);
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPost("ChangeDateOfBirthUser")]
+        public IActionResult ChangeDateOfBirth([FromForm] ChangeInformation command)
+        {
+            string result = changeInformationService.ChangeDateOfBirth(command.DateTime);
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPost("ChangeNameInfor")]
+        public IActionResult ChangeNameInfor([FromForm] ChangeInformation command)
+        {
+            string result = changeInformationService.ChangeNameInfor(command.Name, command.Id);
+            return Ok(result);
+        }
+        [Authorize]
+        [HttpPost("ChangeNumber")]
+        public IActionResult ChangeNumber([FromForm] ChangeInformation command)
+        {
+            string result = changeInformationService.ChangeNumber(command.Number, command.Id);
             return Ok(result);
         }
         [Authorize]
         [HttpPost("ChangeAddress")]
         public IActionResult ChangeAddress([FromForm] ChangeInformation command)
         {
-            var userId =jwtService.GetId();
-            var inforList = database.Informations.Where(x => x.UserId == userId).ToList();
-            if (inforList == null)
-            {
-                return BadRequest("You dont have address. please add your address");
-            }
-            var infor = inforList.FirstOrDefault(e=> e.Id == command.Id);
-            if (infor == null)
-            {
-                return Ok("No have this user");
-            }
-            infor.Address = command.Address;
-            database.Informations.Update(infor);
-            database.SaveChanges();
-            return Ok("Change Complete");
+            string result = changeInformationService.ChangeAddress(command.Address, command.Id);
+            return Ok(result);
         }
-
         [HttpPost("AddProductsToCart")]
         public IActionResult AddProduct([FromForm] AddProductsToCart command)
         {
@@ -87,5 +105,6 @@ namespace WebDemo.Controllers
 
             }
         }
+
     }
 }
