@@ -2,16 +2,16 @@
 
 namespace WebDemo.Models
 {
-    public class BillsDetail
+    public class BillDetail
     {
         private readonly ILazyLoader? lazyLoader;
-        public BillsDetail() { }
-        public BillsDetail(ILazyLoader loader)
+        public BillDetail() { }
+        public BillDetail(ILazyLoader loader)
         {
             lazyLoader = loader;
         }
         public int BillId { get; set; } = 0;
-        public string ProductId { get; set; } = string.Empty;
+        public int ProductId { get; set; } = 0;
         public int Quantity { get; set; } = 0;
 
         private Bill? bill;

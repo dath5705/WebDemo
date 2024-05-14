@@ -129,13 +129,13 @@ namespace WebDemo.Controllers
             }
         }
         [HttpPost("CreateBill")]
-        public IActionResult GetProductList([FromForm] CreateBill command) 
+        public IActionResult GetProductList([FromForm] CreateBill command)
         {
             var userId = jwtService.GetId();
             var position = jwtService.GetPosition();
             if (position == 2)
             {
-                var Result = cartService.CreateBill(command.ProductId);
+                var Result = cartService.CreateBill(command.name, command.Quantity, command.ProductId);
                 return Ok(Result);
             }
             else

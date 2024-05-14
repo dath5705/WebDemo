@@ -30,8 +30,8 @@ namespace WebDemo.Models
         public User? User { get => lazyLoader?.Load(this, ref user); set => user = value; }
         private Shop? shop;
         public Shop? Shop { get => lazyLoader?.Load(this, ref shop); set => shop = value; }
-        //private ICollection<BillDetail>? billsDetail;
-        //public ICollection<BillDetail>? BillsDetail { get => lazyLoader?.Load(this, ref billsDetail); set => billsDetail = value; }
+        private ICollection<BillDetail>? billsDetail;
+        public ICollection<BillDetail>? BillsDetail { get => lazyLoader?.Load(this, ref billsDetail); set => billsDetail = value; }
     }
 }
 

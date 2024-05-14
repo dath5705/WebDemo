@@ -20,6 +20,7 @@ namespace WebDemo
         public DbSet<Sex> Sexs => Set<Sex>();
         public DbSet<Bill> Bills => Set<Bill>();
         public DbSet<Shop> Shops => Set<Shop>();
+        public DbSet<BillDetail> BillsDetail => Set<BillDetail>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasKey(x => x.Id);
@@ -30,6 +31,7 @@ namespace WebDemo
             modelBuilder.Entity<Bill>().HasKey(x => x.Id);
             modelBuilder.Entity<Sex>().HasKey(x => x.Id);
             modelBuilder.Entity<ProductInCart>().HasKey(x => new { x.UserId, x.ProductId });
+            modelBuilder.Entity<BillDetail>().HasKey(x => new { x.BillId, x.ProductId });
 
             modelBuilder.Entity<Role>()
                 .HasMany(e => e.Users)
@@ -62,7 +64,11 @@ namespace WebDemo
                 .WithOne(e => e.Product)
                 .HasForeignKey(e => e.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
-  
+            modelBuilder.Entity<Warehouse>()
+                .HasMany(e => e.BillsDetail)
+                .WithOne(e => e.Product)
+                .HasForeignKey(e => e.ProductId);
+
             modelBuilder.Entity<Shop>()
                 .HasMany(e => e.Products)
                 .WithOne(e => e.Shop)
@@ -76,7 +82,13 @@ namespace WebDemo
             modelBuilder.Entity<Shop>()
                 .HasMany(e => e.Bills)
                 .WithOne(e => e.Shop)
-                .HasForeignKey(e=>e.ShopId)
+                .HasForeignKey(e => e.ShopId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Bill>()
+                .HasMany(e => e.BillsDetail)
+                .WithOne(e => e.Bill)
+                .HasForeignKey(e => e.BillId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

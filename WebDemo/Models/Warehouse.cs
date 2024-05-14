@@ -21,5 +21,7 @@ namespace WebDemo.Models
 
         private ICollection<ProductInCart>? productsInCart;
         public ICollection<ProductInCart>? ProductsInCart { get => lazyLoader?.Load(this, ref productsInCart); set => productsInCart = value; }
+        private ICollection<BillDetail>? billsDetail;
+        public ICollection<BillDetail>? BillsDetail { get => lazyLoader?.Load(this, ref billsDetail); set => billsDetail = value; }
     }
 }
