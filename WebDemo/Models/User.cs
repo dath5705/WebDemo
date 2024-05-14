@@ -24,13 +24,15 @@ namespace WebDemo.Models
         private Sex? sex;
         public Sex? Sex { get => lazyLoader?.Load(this, ref sex); set => sex = value; }
 
-        private ICollection<Warehouse>? products;
-        public ICollection<Warehouse>? Products { get => lazyLoader?.Load(this, ref products); set => products = value; }
-
         private ICollection<Information>? informations;
         public ICollection<Information>? Informations { get => lazyLoader?.Load(this, ref informations); set => informations = value; }
 
         private ICollection<ProductInCart>? productsInCart;
         public ICollection<ProductInCart>? ProductsInCart { get => lazyLoader?.Load(this, ref productsInCart); set => productsInCart = value; }
+        private ICollection<Bill>? bills;
+        public ICollection<Bill>? Bills { get => lazyLoader?.Load(this, ref bills); set => bills = value; }
+        private Shop? shop;
+        public Shop? Shop { get => lazyLoader?.Load(this, ref shop); set => shop = value; }
+      
     }
 }

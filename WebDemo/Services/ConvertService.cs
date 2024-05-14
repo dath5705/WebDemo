@@ -20,7 +20,7 @@ namespace WebDemo.Services
                     Name = x.Name,
                     SexId = x.SexId,
                     DateOfBirth = x.DateOfBirth,
-                    InformationResult = x.Informations?.Select(e =>
+                    Informations = x.Informations?.Select(e =>
                     {
                         InformationResult infor = new()
                         {
@@ -28,7 +28,6 @@ namespace WebDemo.Services
                             Name = e.Name,
                             Number = e.Number,
                             Address = e.Address,
-                            UserId = e.UserId,
                         };
                         return infor;
                     }).ToList(),
@@ -36,6 +35,43 @@ namespace WebDemo.Services
                 return user;
             }).ToList();
             return result;
+        }
+        public UserResult ConvertProduct(User user)
+        {
+            UserResult results = new()
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Password = user.Password,
+                RoleId = user.RoleId,
+                Name = user.Name,
+                SexId = user.SexId,
+                DateOfBirth = user.DateOfBirth,
+                Informations = user.Informations?.Select(e =>
+                {
+                    InformationResult infor = new()
+                    {
+                        Id = e.Id,
+                        Name = e.Name,
+                        Number = e.Number,
+                        Address = e.Address,
+                    };
+                    return infor;
+                }).ToList(),
+                Products = user.ProductsInCart?.Select(e =>
+                {
+                    ProductResult product = new()
+                    {
+                        
+                        ProductId = e.ProductId,
+                        ProductName= e.Product?.ProductName,
+                        Quantity = e.Quantity,
+                        Price = e.Product?.Price,
+                    };
+                    return product;
+                }).ToList(),
+            };
+            return results;
         }
     }
 }

@@ -18,27 +18,30 @@ namespace WebDemo
         public DbSet<Warehouse> Warehouse => Set<Warehouse>();
         public DbSet<ProductInCart> ProductsInCart => Set<ProductInCart>();
         public DbSet<Sex> Sexs => Set<Sex>();
-
+        public DbSet<Bill> Bills => Set<Bill>();
+        public DbSet<Shop> Shops => Set<Shop>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasKey(x => x.Id);
             modelBuilder.Entity<Warehouse>().HasKey(x => x.Id);
             modelBuilder.Entity<Role>().HasKey(x => x.Id);
             modelBuilder.Entity<Information>().HasKey(x => x.Id);
+            modelBuilder.Entity<Shop>().HasKey(x => x.Id);
+            modelBuilder.Entity<Bill>().HasKey(x => x.Id);
+            modelBuilder.Entity<Sex>().HasKey(x => x.Id);
             modelBuilder.Entity<ProductInCart>().HasKey(x => new { x.UserId, x.ProductId });
 
             modelBuilder.Entity<Role>()
                 .HasMany(e => e.Users)
                 .WithOne(e => e.Roll)
                 .HasForeignKey(e => e.RoleId);
+
             modelBuilder.Entity<Sex>()
                 .HasMany(e => e.Users)
                 .WithOne(e => e.Sex)
-                .HasForeignKey(e => e.SexId);
-            modelBuilder.Entity<User>()
-                .HasMany(e => e.Products)
-                .WithOne(e => e.User)
-                .HasForeignKey(e => e.UserId);
+                .HasForeignKey(e => e.SexId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<User>()
                 .HasMany(e => e.Informations)
                 .WithOne(e => e.User)
@@ -48,10 +51,32 @@ namespace WebDemo
                 .WithOne(e => e.User)
                 .HasForeignKey(e => e.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<User>()
+                .HasMany(e => e.Bills)
+                .WithOne(e => e.User)
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Warehouse>()
                 .HasMany(e => e.ProductsInCart)
                 .WithOne(e => e.Product)
                 .HasForeignKey(e => e.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+  
+            modelBuilder.Entity<Shop>()
+                .HasMany(e => e.Products)
+                .WithOne(e => e.Shop)
+                .HasForeignKey(e => e.ShopId)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Shop>()
+                .HasOne(e => e.User)
+                .WithOne(e => e.Shop)
+                .HasForeignKey<Shop>()
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Shop>()
+                .HasMany(e => e.Bills)
+                .WithOne(e => e.Shop)
+                .HasForeignKey(e=>e.ShopId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

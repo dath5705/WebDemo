@@ -8,6 +8,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace WebDemo.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class UserController : Controller
@@ -16,17 +17,20 @@ namespace WebDemo.Controllers
         private readonly JwtTokenService jwtService;
         private readonly ChangeInformationService changeInformationService;
         private readonly CartService cartService;
+        private readonly ConvertService convertService;
 
         public UserController(
             WebDemoDatabase database,
             JwtTokenService jwtService,
             ChangeInformationService changeInformationService,
-            CartService cartService)
+            CartService cartService,
+            ConvertService convertService)
         {
             this.database = database;
             this.jwtService = jwtService;
             this.changeInformationService = changeInformationService;
             this.cartService = cartService;
+            this.convertService = convertService;
         }
         [Authorize]
         [HttpPost("AddInformation")]
@@ -45,7 +49,7 @@ namespace WebDemo.Controllers
             return Ok(information);
         }
 
-        [Authorize]
+
         [HttpPost("ChangeNameUser")]
         public IActionResult ChangeName([FromForm] ChangeInformation command)
         {
@@ -53,7 +57,6 @@ namespace WebDemo.Controllers
             return Ok(result);
         }
 
-        [Authorize]
         [HttpPost("ChangeSexUser")]
         public IActionResult ChangeSex([FromForm] ChangeInformation command)
         {
@@ -61,7 +64,7 @@ namespace WebDemo.Controllers
             return Ok(result);
         }
 
-        [Authorize]
+
         [HttpPost("ChangeDateOfBirthUser")]
         public IActionResult ChangeDateOfBirth([FromForm] ChangeInformation command)
         {
@@ -69,21 +72,20 @@ namespace WebDemo.Controllers
             return Ok(result);
         }
 
-        [Authorize]
+
         [HttpPost("ChangeNameInfor")]
         public IActionResult ChangeNameInfor([FromForm] ChangeInformation command)
         {
             string result = changeInformationService.ChangeNameInfor(command.Name, command.Id);
             return Ok(result);
         }
-        [Authorize]
+
         [HttpPost("ChangeNumber")]
         public IActionResult ChangeNumber([FromForm] ChangeInformation command)
         {
             string result = changeInformationService.ChangeNumber(command.Number, command.Id);
             return Ok(result);
         }
-        [Authorize]
         [HttpPost("ChangeAddress")]
         public IActionResult ChangeAddress([FromForm] ChangeInformation command)
         {
@@ -96,8 +98,8 @@ namespace WebDemo.Controllers
             var position = jwtService.GetPosition();
             if (position == 2)
             {
-                 var a =cartService.AddProducts(command.ProductName, command.Quantity);
-                return Ok(a);
+                var product = cartService.AddProducts(command.ProductName, command.Quantity);
+                return Ok(product);
             }
             else
             {
@@ -105,6 +107,42 @@ namespace WebDemo.Controllers
 
             }
         }
+        [HttpGet("GetCartList")]
+        public IActionResult GetCartList()
+        {
+            var userId = jwtService.GetId();
+            var position = jwtService.GetPosition();
+            if (position == 2)
+            {
+                var user = database.Users.FirstOrDefault(x => x.Id == userId);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                var Result = convertService.ConvertProduct(user);
+                return Ok(Result);
+            }
+            else
+            {
+                return BadRequest("Cannot access this section");
 
+            }
+        }
+        [HttpPost("CreateBill")]
+        public IActionResult GetProductList([FromForm] CreateBill command) 
+        {
+            var userId = jwtService.GetId();
+            var position = jwtService.GetPosition();
+            if (position == 2)
+            {
+                var Result = cartService.CreateBill(command.ProductId);
+                return Ok(Result);
+            }
+            else
+            {
+                return BadRequest("Cannot access this section");
+
+            }
+        }
     }
 }

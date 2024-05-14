@@ -38,7 +38,7 @@ namespace WebDemo.Controllers
             var position = jwtService.GetPosition();
             if (position == 1)
             {
-                var listusers = database.Users.Include(x => x.Informations).Skip(command.PageIndex * command.PageCount).Take(command.PageCount).ToList();
+                var listusers = database.Users.Include(x=>x.ProductsInCart).Include(x => x.Informations).Skip(command.PageIndex * command.PageCount).Take(command.PageCount).ToList();
                 var result = convertService.ConvertUser(listusers);
                 return Ok(result);
             }

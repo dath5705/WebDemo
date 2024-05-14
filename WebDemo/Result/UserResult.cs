@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic;
+using WebDemo.Models;
 
 namespace WebDemo.Result
 {
@@ -11,6 +12,7 @@ namespace WebDemo.Result
         public string? Name { get; set; }
         public int? SexId { get; set; }
         public DateTime? DateOfBirth { get; set; }
-        public List<InformationResult>? InformationResult { get; set; }
+        public List<InformationResult>? Informations{ get; set; }
+        public List<ProductResult>? Products { get; set; }
     }
 }
