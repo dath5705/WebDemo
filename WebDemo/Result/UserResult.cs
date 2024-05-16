@@ -14,5 +14,6 @@ namespace WebDemo.Result
         public DateTime? DateOfBirth { get; set; }
         public List<InformationResult>? Informations{ get; set; }
         public List<ProductResult>? Products { get; set; }
+
     }
 }

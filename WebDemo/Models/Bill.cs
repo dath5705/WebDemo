@@ -26,10 +26,17 @@ namespace WebDemo.Models
         public int UserId { get; set; } = 0;
         public string Status { get; set; } = "Ordered";
         public int ShopId { get; set; } = 0;
+        public int InformationId { get; set; } = 0;
+
         private User? user;
         public User? User { get => lazyLoader?.Load(this, ref user); set => user = value; }
+
         private Shop? shop;
         public Shop? Shop { get => lazyLoader?.Load(this, ref shop); set => shop = value; }
+
+        private Information? information;
+        public Information? Information { get=> lazyLoader.Load(this, ref information); set => information = value; }
+
         private ICollection<BillDetail>? billsDetail;
         public ICollection<BillDetail>? BillsDetail { get => lazyLoader?.Load(this, ref billsDetail); set => billsDetail = value; }
     }

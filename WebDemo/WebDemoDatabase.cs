@@ -44,6 +44,11 @@ namespace WebDemo
                 .HasForeignKey(e => e.SexId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            modelBuilder.Entity<Information>()
+                .HasMany(e => e.Bills)
+                .WithOne(e => e.Information)
+                .HasForeignKey(e => e.InformationId);
+
             modelBuilder.Entity<User>()
                 .HasMany(e => e.Informations)
                 .WithOne(e => e.User)

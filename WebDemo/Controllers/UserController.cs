@@ -18,19 +18,23 @@ namespace WebDemo.Controllers
         private readonly ChangeInformationService changeInformationService;
         private readonly CartService cartService;
         private readonly ConvertService convertService;
+        private readonly BillService billService;
 
         public UserController(
             WebDemoDatabase database,
             JwtTokenService jwtService,
             ChangeInformationService changeInformationService,
             CartService cartService,
-            ConvertService convertService)
+            ConvertService convertService,
+            BillService billService
+            )
         {
             this.database = database;
             this.jwtService = jwtService;
             this.changeInformationService = changeInformationService;
             this.cartService = cartService;
             this.convertService = convertService;
+            this.billService = billService;
         }
         [Authorize]
         [HttpPost("AddInformation")]
@@ -129,13 +133,12 @@ namespace WebDemo.Controllers
             }
         }
         [HttpPost("CreateBill")]
-        public IActionResult GetProductList([FromForm] CreateBill command)
+        public IActionResult CreateBill([FromForm] CreateBill command)
         {
-            var userId = jwtService.GetId();
             var position = jwtService.GetPosition();
             if (position == 2)
             {
-                var Result = cartService.CreateBill(command.name, command.Quantity, command.ProductId);
+                var Result = billService.CreateBill(command.Name, command.Quantity, command.InforId);
                 return Ok(Result);
             }
             else
@@ -143,6 +146,27 @@ namespace WebDemo.Controllers
                 return BadRequest("Cannot access this section");
 
             }
+        }
+        [HttpPost("AddBillDetail")]
+        public IActionResult BillDetail([FromForm] BillsDetail command)
+        {
+            var position = jwtService.GetPosition();
+            if (position == 2)
+            {
+                var Result = billService.BillDetail(command.ProductId, command.ProductName);
+                return Ok(Result);
+            }
+            else
+            {
+                return BadRequest("Cannot access this section");
+
+            }
+        }
+        [HttpGet("GetBill")]
+        public IActionResult GetBill()
+        {
+            var bill = billService.GetBill();
+            return Ok(bill);
         }
     }
 }

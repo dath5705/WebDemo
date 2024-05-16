@@ -44,41 +44,5 @@ namespace WebDemo.Services
             }
             return "Add product successed";
         }
-        public string CreateBill(string productNameInput, int productQuantityInput, int shoppIdInput)
-        {
-            var userId = jwtService.GetId();
-            Bill bill = new()
-            {
-                UserId = userId,
-                ShopId = shoppIdInput
-            };
-            database.Bills.Add(bill);
-            database.SaveChanges();
-            AddProducts(productNameInput, productQuantityInput);
-            return "Create Bill Complete";
-        }
-        public string BillDetail(int productIdInput, string productNameInput)
-        {
-            var userId = jwtService.GetId();
-            var productId = database.Warehouse.FirstOrDefault(x => x.ProductName.ToLower().Contains(productNameInput.ToLower()));
-            var product = database.ProductsInCart.Where(x => x.UserId == userId)
-                .Where(x => x.ProductId == (productId == null ? productIdInput : productId.Id))
-                .FirstOrDefault();
-            var bill = database.Bills.Where(x => x.UserId == userId).Where(x => x.Status == "Ordered").FirstOrDefault();
-            if (product == null)
-            {
-                return "You don't choose product";
-            }
-            BillDetail billDetail = new()
-            {
-                BillId = bill!.Id,
-                ProductId = product.ProductId,
-                Quantity = product.Quantity,
-            };
-            database.BillsDetail.Add(billDetail);
-            database.ProductsInCart.Remove(product);
-            database.SaveChanges();
-            return "Create Bill Complete";
-        }
     }
 }

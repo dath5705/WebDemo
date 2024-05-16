@@ -18,5 +18,8 @@ namespace WebDemo.Models
 
         private User? user;
         public User? User { get => lazyLoader?.Load(this, ref user); set => user = value; }
+
+        private ICollection<Bill>? bills;
+        public ICollection<Bill>? Bills{ get => lazyLoader?.Load(this, ref bills); set => bills = value; }
     }
 }
